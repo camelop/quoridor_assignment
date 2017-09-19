@@ -1,0 +1,5 @@
+red 1 4
+blue 7 4
+red 2 4
+wall 5 3
+win Red Win! Congratulations
