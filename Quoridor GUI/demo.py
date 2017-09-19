@@ -3,6 +3,7 @@ pygame.init()
 
 # Define some colors
 BLACK = (0,   0,   0)
+DARK = (100, 100, 100)
 GRAY = (200, 200, 200)
 WHITE = (255, 255, 255)
 GREEN = (0, 255,   0)
@@ -200,13 +201,37 @@ while not done:
         NextMove()
         playing = speed
 
+    # show the rectangle if cover
+    mouse_pos = pygame.mouse.get_pos()
+    mouse_x = mouse_pos[0]
+    mouse_y = mouse_pos[1]
+
+    for conditions, id in wall_zone.items():
+        x, y = mouse_pos
+        joint = 10
+        if id[0] % 2 == 0:
+            if conditions[0] - 8 <= x <= conditions[2] + 8:
+                if conditions[1] <= y <= conditions[3]:
+                    x = edge + id[0] // 2 * block_h
+                    y = edge + id[1] * block_w + block_w
+                    pygame.draw.line(
+                        screen, DARK, [y, x + joint], [y,  x + block_h * 2 - joint], joint * 2 - 4)
+                    break
+        else:
+            if conditions[0] <= x <= conditions[2]:
+                if conditions[1] - 8 <= y <= conditions[3] + 8:
+                    x = edge + (id[0] + 1) // 2 * block_h
+                    y = edge + id[1] * block_w
+                    pygame.draw.line(
+                        screen, DARK, [y + joint, x], [y + block_w * 2 - joint, x], joint * 2 - 4)
+                    break
+
     # change mouse
     if nw_side == 0:
         nw_color = RED
     else:
         nw_color = BLUE
-    pygame.draw.rect(screen, nw_color, [pygame.mouse.get_pos()[
-                     0], pygame.mouse.get_pos()[1], 30, 30], 5)
+    pygame.draw.rect(screen, nw_color, [mouse_x, mouse_y, 30, 30], 5)
 
     # --- Drawing code should go here
     DrawBoard()
