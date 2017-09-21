@@ -14,6 +14,26 @@ class Board(object):
         self.walls.append(10)
         self.recordColor = 0
 
+    def checkConnect(self):
+        cnt = 0
+        for s in self.loc:
+            vis = np.zeros((20, 20), dtype=bool)
+
+            def fill(x, y):
+                vis[x][y] = True
+                for x, y in [(0, 1), (0, -1), (1, 0), (1, -1)]:
+                    nw_pos = (s[0] + 2 * x, s[1] + 2 * y)
+                    if 2 <= nw_pos[0] <= 18 and 2 <= nw_pos[1] <= 18:
+                        if not self.board[s[0] + x][s[1] + y] and not vis[nw_pos[0]][nw_pos[1]]:
+                            fill(nw_pos[0], nw_pos[1])
+            fill(s[0], s[1])
+            if cnt == 0 and not (True in [vis[18][i] for i in range(2, 20, 2)]):
+                return False
+            if cnt == 1 and not (True in [vis[2][i] for i in range(2, 20, 2)]):
+                return False
+            cnt += 1
+        return True
+
     def positionType(self, loc):
         if 2 <= loc[0] <= 18 and 2 <= loc[1] <= 18 and loc[0] % 2 == 0 and loc[1] % 2 == 0:
             return 0
@@ -87,6 +107,8 @@ class Board(object):
             self.board[loc[0]][loc[1]] = True
             self.board[loc[0] + 1][loc[1]] = True
             self.board[loc[0] + 2][loc[1]] = True
+            if not self.checkConnect():
+                return "You block someone's way..."
             self.side = 1 - self.side
             self.walls[self.side] -= 1
             self.record(loc)
@@ -100,6 +122,8 @@ class Board(object):
             self.board[loc[0]][loc[1]] = True
             self.board[loc[0]][loc[1] + 1] = True
             self.board[loc[0]][loc[1] + 2] = True
+            if not self.checkConnect():
+                return "You block someone's way..."
             self.side = 1 - self.side
             self.walls[self.side] -= 1
             self.record(loc)
