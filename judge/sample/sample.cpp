@@ -2,33 +2,32 @@
 
 extern int ai_side;
 
-std::pair<int, int> loc;
+int locx, locy; 
 
-int main() {
-	SubmitInit();
+void init() {
 	if (ai_side == 0) {
-		loc = std::make_pair(2, 10);
-		while (true) {
-			std::pair<int, int> temp;
-			Post(std::make_pair(4, 10));
-			Debug("I go four ten.\n");
-			temp = GetUpdate();
-			Post(std::make_pair(2, 10));
-			Debug("Then I'm back~\n");
-			temp = GetUpdate();
-		}
+		locx = 2;
+		locy = 10;
+	} else {
+		locx = 18;
+		locy = 10;
 	}
-	else {
-		loc = std::make_pair(18, 10);
-		while (true) {
-			std::pair<int, int> temp;
-			temp = GetUpdate();
-			Post(std::make_pair(16, 10));
-			Debug("I go sixteen ten.\n");
-			temp = GetUpdate();
-			Post(std::make_pair(18, 10));
-			Debug("Then I'm back~\n");
-		}
+}
+
+void GetUpdate(std::pair<int, int> location) {
+	return;
+}
+
+
+bool temp = true;
+std::pair<int, int> Action() {
+	if (temp) {
+		temp = false;
+		Debug("GO~\n");
+		return std::make_pair(locx, locy +2);
+	} else {
+		temp = true;
+		Debug("Then I'm back~\n");
+		return std::make_pair(locx, locy);
 	}
-	return 0;
 }
