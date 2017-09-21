@@ -12,6 +12,7 @@ class Board(object):
         self.walls = []
         self.walls.append(10)
         self.walls.append(10)
+        self.recordColor = 0
 
     def positionType(self, loc):
         if 2 <= loc[0] <= 18 and 2 <= loc[1] <= 18 and loc[0] % 2 == 0 and loc[1] % 2 == 0:
@@ -25,6 +26,21 @@ class Board(object):
                     return 2
         return 3
 
+    def record(self, loc):
+        file = open("record.txt", "a")
+        type = self.positionType(loc)
+        if type == 0:
+            if self.recordColor == 0:
+                file.write("red")
+            else:
+                file.write("blue")
+            file.write(" " + str(loc[0] // 2 - 1) +
+                       " " + str(loc[1] // 2 - 1) + "\n")
+        elif type in (1, 2):
+            file.write("wall " + str(loc[0] - 2) + " " + str(loc[1] // 2 - 1))
+        file.close()
+        self.recordColor = 1 - self.recordColor
+
     def update(self, loc):
         case = self.positionType(loc)
         otherside = 1 - self.side
@@ -37,6 +53,7 @@ class Board(object):
                 if loc != self.loc[otherside] and not self.board[wall[0]][wall[1]]:
                     self.loc[self.side] = loc
                     self.side = 1 - self.side
+                    self.record(loc)
                     return True
             else:
                 for d in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
@@ -52,11 +69,13 @@ class Board(object):
                             if not self.board[nw_loc[0] + 2 * d[0] + dt[0]][nw_loc[1] + 2 * d[1] + dt[1]]:
                                 self.loc[self.side] = loc
                                 self.side = 1 - self.side
+                                self.record(loc)
                                 return True
                     else:
                         if nw_loc[0] + 4 * d[0] == loc[0] and nw_loc[1] + 4 * d[1] == loc[1]:
                             self.loc[self.side] = loc
                             self.side = 1 - self.side
+                            self.record(loc)
                             return True
             return "Invalid Move"
         elif case == 1:
@@ -70,6 +89,7 @@ class Board(object):
             self.board[loc[0] + 2][loc[1]] = True
             self.side = 1 - self.side
             self.walls[self.side] -= 1
+            self.record(loc)
             return True
         elif case == 2:
             if self.board[loc[0]][loc[1]] or\
@@ -82,6 +102,7 @@ class Board(object):
             self.board[loc[0]][loc[1] + 2] = True
             self.side = 1 - self.side
             self.walls[self.side] -= 1
+            self.record(loc)
             return True
         else:
             return "Invalid Move"
