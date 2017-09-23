@@ -1,4 +1,8 @@
 red 0 5
+red 0 5
+red 0 5
+red 0 5
+red 0 5
 blue 8 5
 red 0 4
 blue 8 4
@@ -100,6 +104,8 @@ red 0 4
 blue 8 4
 red 0 5
 blue 8 5
+red 0 5
+blue 8 5
 red 0 4
 blue 8 4
 red 0 5
@@ -199,6 +205,7 @@ blue 8 5
 red 0 4
 blue 8 4
 red 0 5
+blue 8 5
 red 0 5
 blue 8 5
 red 0 4
@@ -299,6 +306,7 @@ red 0 5
 blue 8 5
 red 0 4
 blue 8 4
+red 0 5
 red 0 5
 blue 8 5
 red 0 4

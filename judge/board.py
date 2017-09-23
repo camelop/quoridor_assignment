@@ -2,7 +2,7 @@ import numpy as np
 
 
 class Board(object):
-    def __init__(self):
+    def __init__(self, json_dict):
         self.board = np.zeros((20, 20), dtype=bool)
         self.loc = []
         self.loc.append([2, 10])
@@ -13,6 +13,7 @@ class Board(object):
         self.walls.append(10)
         self.walls.append(10)
         self.recordColor = 0
+        self.record_json = json_dict
 
     def checkConnect(self):
         cnt = 0
@@ -49,15 +50,23 @@ class Board(object):
     def record(self, loc):
         file = open("record.txt", "a")
         type = self.positionType(loc)
+        output = ""
         if type == 0:
             if self.recordColor == 0:
                 file.write("red")
+                output = output + "red"
             else:
                 file.write("blue")
-            file.write(" " + str(loc[0] // 2 - 1) +
-                       " " + str(loc[1] // 2 - 1) + "\n")
+                output = output + "red"
+            file.write(" " + str(loc[0] // 2 - 1) + " " + str(loc[1]
+                                                              // 2 - 1) + "\n")
+            output = output + " " + str(loc[0] // 2 - 1) + " " + str(loc[1]
+                                                                     // 2 - 1) + "\n"
         elif type in (1, 2):
             file.write("wall " + str(loc[0] - 2) + " " + str(loc[1] // 2 - 1))
+            output = output + "wall " + \
+                str(loc[0] - 2) + " " + str(loc[1] // 2 - 1)
+        self.record_json["step"].append(output)
         file.close()
         self.recordColor = 1 - self.recordColor
 

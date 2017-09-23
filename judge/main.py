@@ -3,6 +3,7 @@ import time
 import threading
 import locale
 import random
+import json
 from board import Board
 from queue import Empty
 from pprint import pprint
@@ -22,12 +23,15 @@ def action(ai, content):
 
 
 def get_init(ai0, ai1, side=random.randint(0, 1)):
-    global turn
+    global turn, record_json
     turn = side
     try:
         ai0.send(side)
         ai1.send(1 - side)
         names = [ai0.recv(timeout=2), ai1.recv(timeout=2)]
+        record_json['id'] = [side, 1 - side]
+        record_json['err'] = ["", ""]
+        record_json['init-board'] = ""
     except Empty as e:
         return {'err': 'timeout'}
     except Exception as e:
@@ -37,13 +41,20 @@ def get_init(ai0, ai1, side=random.randint(0, 1)):
 
 
 def finish(winner2, err0="", err1=""):
-    global running, name0, name1, first_sit, steps, winner, ai0, ai1
+    global running, name0, name1, first_sit, steps, winner, ai0, ai1, record_json
     winner = winner2
+    record_json['total'] = steps
+    record_json['result'] = winner2
     # kill ai and write stdio log
     if type(ai0) is not dict:
         ai0.exit()
     if type(ai1) is not dict:
         ai1.exit()
+
+    print(record_json)
+    json_out = open('record.json', 'w')
+    json.dump(record_json, json_out)
+    json_out.close()
 
     running = False
     sys.exit(0)
@@ -59,8 +70,8 @@ def spawnAI(args, save_stdin_path, save_stdout_path, save_stderr_path):
 
 
 def judge():
-    global steps, ai0, ai1, turn
-    nw = Board()
+    global steps, ai0, ai1, turn, record_json
+    nw = Board(record_json)
     ai0 = spawnAI(sys.argv[1], 'ai0_stdin.log',
                   'ai0_stdout.log', 'ai0_stderr.log')
     ai1 = spawnAI(sys.argv[2], 'ai1_stdin.log',
@@ -72,7 +83,8 @@ def judge():
         name0 = "Unknown_0"
     if name1 == "":
         name1 = "Unknown_1"
-
+    record_json['user'] = [name0, name1]
+    record_json['step'] = []
     while (True):
         print(steps)
         x = ""
@@ -120,7 +132,7 @@ def judge():
             break
         steps += 1
         # send to 0
-        if steps > 200:
+        if steps > 100:
             print("DRAW!")
             finish(2)
             break
@@ -147,6 +159,7 @@ ai1 = 0
 name0 = 'Unknown'
 name1 = 'Unknown'
 winner = -1
+record_json = {}
 main()
 
 if type(ai0) is not dict:
