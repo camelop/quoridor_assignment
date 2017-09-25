@@ -31,7 +31,7 @@ def get_init(ai0, ai1, side=random.randint(0, 1)):
         names = [ai0.recv(timeout=2), ai1.recv(timeout=2)]
         record_json['id'] = [side, 1 - side]
         record_json['err'] = ["", ""]
-        record_json['init-board'] = ""
+    #     record_json['init-board'] = ""
     except Empty as e:
         return {'err': 'timeout'}
     except Exception as e:

@@ -50,22 +50,23 @@ class Board(object):
     def record(self, loc):
         file = open("record.txt", "a")
         type = self.positionType(loc)
-        output = ""
+        output = {}
         if type == 0:
             if self.recordColor == 0:
                 file.write("red")
-                output = output + "red"
+                output['kind'] = 'red'
             else:
                 file.write("blue")
-                output = output + "red"
+                output['kind'] = 'blue'
             file.write(" " + str(loc[0] // 2 - 1) + " " + str(loc[1]
                                                               // 2 - 1) + "\n")
-            output = output + " " + str(loc[0] // 2 - 1) + " " + str(loc[1]
-                                                                     // 2 - 1) + "\n"
+            output['x'] = loc[0] // 2 - 1
+            output['y'] = loc[1] // 2 - 1
         elif type in (1, 2):
             file.write("wall " + str(loc[0] - 2) + " " + str(loc[1] // 2 - 1))
-            output = output + "wall " + \
-                str(loc[0] - 2) + " " + str(loc[1] // 2 - 1)
+            output['kind'] = 'wall'
+            output['x'] = loc[0] - 2
+            output['y'] = loc[1] // 2 - 1
         self.record_json["step"].append(output)
         file.close()
         self.recordColor = 1 - self.recordColor
