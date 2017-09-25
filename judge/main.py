@@ -51,8 +51,9 @@ def finish(winner2, err0="", err1=""):
     if type(ai1) is not dict:
         ai1.exit()
 
-    print(record_json)
-    json_out = open('record.json', 'w')
+    if not p2dv:
+        print(record_json)
+    json_out = open('result.json', 'w')
     json.dump(record_json, json_out)
     json_out.close()
 
@@ -137,18 +138,39 @@ def judge():
             finish(2)
             break
 
+def p2dv():
+    t = threading.Thread(target=judge)
+    t.start()
+
+    while True:
+        line = sys.stdin.readline()
+        if not running:
+            sys.stderr.write('finished\n')
+            sys.stderr.flush()
+            break
+
+        if line == 'get steps\n':
+            sys.stderr.write('%d\n'%steps)
+
+        sys.stderr.flush()
+
 
 def main():
-    global running
+    global running, p2dv
 
-    if len(sys.argv) != 3:
+    if (not len(sys.argv) in [3, 4]):
         print('usage:   ./main.py ai0Path ai1Path')
         print('example: ./main.py ./sample_ai ./sample_ai')
         print('')
         sys.exit(1)
 
     running = True
-    judge()
+    if len(sys.argv) == 4 and sys.argv[3] == 'p2dv':
+        is_p2dv = True
+        p2dv()
+    else:
+        is_p2dv = False
+        judge()
 
 
 # locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
