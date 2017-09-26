@@ -2,7 +2,7 @@
 #include <string>
 
 /******************************************/
-std::string ai_name = "Artificial Idiot V0";
+extern std::string ai_name;
 /******************************************/
 
 int ai_side; // 0 -> up and 1 -> down

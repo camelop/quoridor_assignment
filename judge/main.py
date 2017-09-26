@@ -22,29 +22,45 @@ def action(ai, content):
     return {'nx': nx, 'ny': ny}
 
 
+should_reverse = 0
+
+
 def get_init(ai0, ai1, side=random.randint(0, 1)):
-    global turn, record_json
+    global turn, record_json, should_reverse
     turn = side
+    should_reverse = side
+    names = ["", ""]
     try:
         ai0.send(side)
-        ai1.send(1 - side)
-        names = [ai0.recv(timeout=2), ai1.recv(timeout=2)]
-        record_json['id'] = [side, 1 - side]
-        record_json['err'] = ["", ""]
+        names[0] = ai0.recv(timeout=2)
     #     record_json['init-board'] = ""
     except Empty as e:
-        return {'err': 'timeout'}
+        finish(1, "timeout", "")
     except Exception as e:
         print(e)
-        return {'err': str(e)}
+        finish(2, str(e), str(e))
+
+    try:
+        ai1.send(1 - side)
+        names[1] = ai1.recv(timeout=2)
+    except Empty as e:
+        finish(0, "", "timeout")
+    except Exception as e:
+        print(e)
+        finish(2, str(e), str(e))
+
+    record_json['id'] = [side, 1 - side]
     return tuple(names)
 
 
 def finish(winner2, err0="", err1=""):
-    global running, name0, name1, first_sit, steps, winner, ai0, ai1, record_json
+    global running, name0, name1, first_sit, steps, winner, ai0, ai1, record_json, should_reverse
     winner = winner2
     record_json['total'] = steps
+    if winner2 < 2 and should_reverse == 1:
+        winner2 = 1 - winner2
     record_json['result'] = winner2
+    record_json['err'] = [err0, err1]
     # kill ai and write stdio log
     if type(ai0) is not dict:
         ai0.exit()
@@ -100,8 +116,8 @@ def judge():
                 if rec != True:
                     finish(1)
                     break
-                if nw.result == 0:
-                    finish(0)
+                if nw.result() < 2:
+                    finish(nw.result())
                     break
             except Exception as e:
                 print(e)
@@ -109,7 +125,7 @@ def judge():
                 break
             steps += 1
         turn = 0
-        if steps > 200:
+        if steps > 99:
             print("DRAW!")
             finish(2)
             break
@@ -124,8 +140,8 @@ def judge():
             if rec != True:
                 finish(0)
                 break
-            if nw.result == 1:
-                finish(1)
+            if nw.result() < 2:
+                finish(nw.result())
                 break
         except Exception as e:
             print(e)
@@ -133,10 +149,11 @@ def judge():
             break
         steps += 1
         # send to 0
-        if steps > 100:
+        if steps > 99:
             print("DRAW!")
             finish(2)
             break
+
 
 def p2dv():
     t = threading.Thread(target=judge)
@@ -150,7 +167,7 @@ def p2dv():
             break
 
         if line == 'get steps\n':
-            sys.stderr.write('%d\n'%steps)
+            sys.stderr.write('%d\n' % steps)
 
         sys.stderr.flush()
 
