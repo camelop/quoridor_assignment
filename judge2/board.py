@@ -21,13 +21,15 @@ class Board(object):
             vis = np.zeros((20, 20), dtype=bool)
 
             def fill(x, y):
+                print('fill ', x, y)
                 vis[x][y] = True
-                for x, y in [(0, 1), (0, -1), (1, 0), (1, -1)]:
-                    nw_pos = (s[0] + 2 * x, s[1] + 2 * y)
+                for xx, yy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+                    nw_pos = (x + 2 * xx, y + 2 * yy)
                     if 2 <= nw_pos[0] <= 18 and 2 <= nw_pos[1] <= 18:
-                        if not self.board[s[0] + x][s[1] + y] and not vis[nw_pos[0]][nw_pos[1]]:
+                        if not self.board[x + xx][y + yy] and not vis[nw_pos[0]][nw_pos[1]]:
                             fill(nw_pos[0], nw_pos[1])
             fill(s[0], s[1])
+            print(vis)
             if cnt == 0 and not (True in [vis[18][i] for i in range(2, 20, 2)]):
                 return False
             if cnt == 1 and not (True in [vis[2][i] for i in range(2, 20, 2)]):
@@ -150,9 +152,10 @@ class Board(object):
             return 2
 
 
-"""
+'''
 # Test
-b = Board()
+ddd = {}
+b = Board(ddd)
 np.set_printoptions(threshold=np.nan)
 while (True):
     print(b.loc, b.side)
@@ -160,5 +163,6 @@ while (True):
     temp = input()
     temp = temp.split()
     temp = list(map(int, temp))
-    b.update(temp)
-"""
+    rec = b.update(temp)
+    print('rec: ', rec)
+'''

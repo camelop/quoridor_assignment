@@ -203,7 +203,7 @@ def main():
         judge()
 
 
-# locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 with open('record.txt', 'w') as f:
     f.write("Init\n")
 main()

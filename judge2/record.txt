@@ -8,3 +8,4 @@ blue 6 3
 red 3 3
 blue 5 3
 red 4 3
+wall 5 3
