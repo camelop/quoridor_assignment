@@ -1,0 +1,1 @@
+python main.py ai.exe ai.exe

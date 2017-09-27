@@ -10,8 +10,8 @@ GREEN = (0, 255,   0)
 RED = (255,   0,   0)
 BLUE = (0,   0, 255)
 
-screen_h = 900
-screen_w = 900
+screen_h = 500
+screen_w = 500
 edge = 50
 screen = pygame.display.set_mode((screen_w, screen_h))
 pygame.display.set_caption("Quoridor Demo v1.1 by littleRound")
