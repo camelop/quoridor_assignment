@@ -8,4 +8,4 @@ blue 6 3
 red 3 3
 blue 5 3
 red 4 3
-wall 5 3
+wall 5 3wall 0 0wall 0 0wall 0 0wall 0 1wall 0 2wall 0 3wall 0 4wall 0 5wall 0 6wall 0 7wall 4 0wall 4 1wall 4 2wall 4 3wall 4 4wall 4 5wall 4 6wall 4 7wall 8 0wall 8 1wall 8 2wall 0 0wall 0 1wall 0 2wall 0 3wall 0 4wall 0 5wall 0 6wall 0 7wall 4 0wall 4 1wall 4 2wall 4 3wall 4 4wall 4 5wall 4 6wall 4 7wall 8 0wall 8 1wall 0 0wall 0 1wall 0 2wall 0 3wall 0 4wall 0 5wall 0 6wall 0 7wall 4 0wall 4 1wall 4 2wall 4 3wall 4 4wall 4 5wall 4 6wall 4 7wall 8 0wall 8 1wall 8 2wall 8 3

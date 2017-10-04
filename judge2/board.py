@@ -111,33 +111,35 @@ class Board(object):
                             return True
             return "Wrong Place to move your chess"
         elif case == 1:
+            if self.walls[self.side] <= 0:
+                return "Wall not enough..."
             if self.board[loc[0]][loc[1]] or\
                     self.board[loc[0] + 1][loc[1]] or\
-                    self.board[loc[0] + 2][loc[1]] or\
-                    self.walls[self.side] <= 0:
+                    self.board[loc[0] + 2][loc[1]]:
                 return "A wall already here..."
             self.board[loc[0]][loc[1]] = True
             self.board[loc[0] + 1][loc[1]] = True
             self.board[loc[0] + 2][loc[1]] = True
             if not self.checkConnect():
                 return "You block someone's way..."
-            self.side = 1 - self.side
             self.walls[self.side] -= 1
+            self.side = 1 - self.side
             self.record(loc)
             return True
         elif case == 2:
+            if self.walls[self.side] <= 0:
+                return "Wall not enough..."
             if self.board[loc[0]][loc[1]] or\
                     self.board[loc[0]][loc[1] + 1] or\
-                    self.board[loc[0]][loc[1] + 2] or\
-                    self.walls[self.side] <= 0:
+                    self.board[loc[0]][loc[1] + 2]:
                 return "A wall already here..."
             self.board[loc[0]][loc[1]] = True
             self.board[loc[0]][loc[1] + 1] = True
             self.board[loc[0]][loc[1] + 2] = True
             if not self.checkConnect():
                 return "You block someone's way..."
-            self.side = 1 - self.side
             self.walls[self.side] -= 1
+            self.side = 1 - self.side
             self.record(loc)
             return True
         else:
@@ -155,6 +157,7 @@ class Board(object):
 '''
 # Test
 ddd = {}
+ddd['step'] = []
 b = Board(ddd)
 np.set_printoptions(threshold=np.nan)
 while (True):
@@ -165,4 +168,5 @@ while (True):
     temp = list(map(int, temp))
     rec = b.update(temp)
     print('rec: ', rec)
+
 '''
