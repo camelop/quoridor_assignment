@@ -43,9 +43,9 @@ class ChildProcess():
                     content = op['content']
                     if self.abused == 0:
                         if self.child.poll() is not None:
-                            self.qthread.put('finish')
                             self.abused = -1
-                            raise Exception("Runtime error.")
+                            self.qthread.put('finish')
+                            raise Exception('program unexpectedly terminated')
                         else:
                             self.abused = 2
                     self.child.stdin.write(str(content) + '\n')
@@ -60,7 +60,7 @@ class ChildProcess():
                         if self.child.poll() is not None:
                             self.qthread.put('finish')
                             self.abused = -1
-                            raise Exception("Runtime error.")
+                            raise Exception("ERROR: Runtime error.")
                         else:
                             self.abused = 2
                     while not content.endswith('END\n'):
@@ -83,16 +83,12 @@ class ChildProcess():
         res = self.qthread.get()
         if type(res) is Exception:
             raise res
-        if self.child.poll() is not None:
-            raise Exception("Runtime error.")
 
     def recv(self, timeout):
         self.qmain.put({'command': 'recv'})
         content = self.qthread.get(timeout=timeout)
         if type(content) is Exception:
             raise content
-        if self.child.poll() is not None:
-            raise Exception("Runtime error.")
         return content
 
     def exit(self):

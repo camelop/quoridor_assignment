@@ -65,7 +65,7 @@ class Board(object):
             output['x'] = loc[0] // 2 - 1
             output['y'] = loc[1] // 2 - 1
         elif type in (1, 2):
-            file.write("wall " + str(loc[0] - 2) + " " + str(loc[1] // 2 - 1)+ "\n")
+            file.write("wall " + str(loc[0] - 2) + " " + str(loc[1] // 2 - 1))
             output['kind'] = 'wall'
             output['x'] = loc[0] - 2
             output['y'] = loc[1] // 2 - 1

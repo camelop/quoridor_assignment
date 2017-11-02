@@ -22,8 +22,6 @@ def finish(winner):
     record_json['total'] = steps
     record_json['result'] = winner
     record_json['err'] = [ai0.err, ai1.err]
-    print(ai0.ai)
-    print(ai1.ai)
     print(ai0.err, ai1.err)
     if type(ai0.ai) is not dict:
         ai0.ai.exit()
@@ -107,7 +105,6 @@ class AI(object):
             self.err = "Timeout while running"
             return False
         except Exception as e:
-            self.err = str(e)
             return False
         return feedback
 
@@ -142,6 +139,7 @@ def judge():
     ins = ""
     while True:
 
+        print('Step: ', steps)
         if turn == 0:  # To make the order right
             suc0 = ai0.run(nw, ins)
             if type(suc0) != str:
@@ -156,6 +154,7 @@ def judge():
         if steps > 99:
             finish(2)
 
+        print('Step: ', steps)
         suc1 = ai1.run(nw, ins)
         if type(suc1) != str:
             if suc1:
