@@ -2,6 +2,8 @@
 
 SJTU-ACM Programming 2017
 
+![demo](records/tightGame.gif)
+
 ## 1. 关于游戏
 
 游戏名为Quoridor，中文翻译“步步为盈棋”或“墙棋”。规则如下：
